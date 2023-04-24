@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity, Image } from 'react-native';
 
 export default function App() {
   const [tarea, setTarea] = useState('');
@@ -29,8 +29,9 @@ export default function App() {
     }
 
     const renderValoresPOkemons = ({ item }) => (
-      <View style={{ flexDirection: 'col', alignItems: 'center', margin: 12 }}>
+      <View style={{flex:1, flexDirection: 'col', alignItems: 'center', margin: 12 }}>
         <Text style={{ fontSize: 20 }}>{`Pokemon: ${item.name}`}</Text>
+        <Image style={{width:'50%', height:'100px'}} source={item.img}/>
       </View>
     )
 
