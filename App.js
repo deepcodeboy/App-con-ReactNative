@@ -6,6 +6,33 @@ export default function App() {
   const [tarea, setTarea] = useState('');
   const [tareaLista, setTareaLista] = useState([]);
   const [jugadorLista, setJugadorLista] = useState([])
+  const [pokemons, setPokemons] = useState([])
+
+  
+    const getPokemons = async () => {
+      const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=30&offset=0')
+      const listaPokemons = await response.json()
+      const { results } = listaPokemons
+
+      const newPokemons = results.map(async (pokemon) => {
+
+        const response = await fetch(pokemon.url)
+        const poke = await response.json()
+
+        return {
+          id: poke.id,
+          name: poke.name,
+          img: poke.sprites.other["official-artwork"].front_default
+        }
+      })
+      setPokemons(await Promise.all(newPokemons))
+    }
+
+    const renderValoresPOkemons = ({ item }) => (
+      <View style={{ flexDirection: 'col', alignItems: 'center', margin: 12 }}>
+        <Text style={{ fontSize: 20 }}>{`Pokemon: ${item.name}`}</Text>
+      </View>
+    )
 
   const agregarTareaALista = () => {
     if (tarea !== '') {
@@ -54,11 +81,20 @@ export default function App() {
       </View>
       <FlatList data={tareaLista} renderItem={renderLista} keyExtractor={item => item.id} />
 
-      <View style={styles.container}>
+      <View >
         <Button title='Mostrar jugadores' onPress={renderJugadores} />
         <FlatList data={jugadorLista} renderItem={renderValoresJugadores} keyExtractor={(item) => item.id}
         />
       </View>
+
+      <View >
+        <Button title='Mostrar pokemones' onPress={getPokemons} />
+        <FlatList data={pokemons} renderItem={renderValoresPOkemons} keyExtractor={(item) => item.id}
+        />
+      </View>
+
+
+
     </View>
   );
 };
