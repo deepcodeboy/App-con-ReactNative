@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity }
 export default function App() {
   const [tarea, setTarea] = useState('');
   const [tareaLista, setTareaLista] = useState([]);
+  const [jugadorLista, setJugadorLista] = useState([])
 
   const agregarTareaALista = () => {
     if (tarea !== '') {
@@ -27,6 +28,24 @@ export default function App() {
     setTareaLista(listas => listas.filter(e => e.id != idElemento))
   }
 
+
+  const listaJugadores = [
+    { id: 1, nombre: "Messi", deporte: "Futbol" },
+    { id: 2, nombre: "Federer", deporte: "Tenis" },
+    { id: 3, nombre: "Pachiao", deporte: "Boxeo" }
+  ]
+
+  const renderJugadores = () => {
+    setJugadorLista(listaJugadores)
+  }
+
+  const renderValoresJugadores = ({ item }) => (
+    <View style={{ flexDirection: 'col', alignItems: 'center', margin: 12 }}>
+      <Text style={{ fontSize: 20 }}>{`Nombre:${item.nombre}, Deporte: ${item.deporte}`}</Text>
+    </View>
+  )
+
+
   return (
     <View style={styles.container}>
       <View>
@@ -34,6 +53,12 @@ export default function App() {
         <Button title="Agregar" onPress={agregarTareaALista} color="red" />
       </View>
       <FlatList data={tareaLista} renderItem={renderLista} keyExtractor={item => item.id} />
+
+      <View style={styles.container}>
+        <Button title='Mostrar jugadores' onPress={renderJugadores} />
+        <FlatList data={jugadorLista} renderItem={renderValoresJugadores} keyExtractor={(item) => item.id}
+        />
+      </View>
     </View>
   );
 };
