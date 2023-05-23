@@ -1,12 +1,15 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Constants from 'expo-constants'
 import { scale } from 'react-native-size-matters'
 import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
-const Pokemon = ({navigation}) => {
+const Pokemon = ({ navigation }) => {
     const [pokemons, setPokemons] = useState([])
     const [searchText, setSearchText] = useState('');
+
+    useEffect(() => { console.log(pokemons) }, [pokemons]);
+
 
     const getPokemons = async () => {
 
@@ -22,30 +25,57 @@ const Pokemon = ({navigation}) => {
             return {
                 id: poke.id,
                 name: poke.name,
-                img: poke.sprites.other["official-artwork"].front_default
+                img: poke.sprites.other["official-artwork"].front_default,
+                imgShiny: poke.sprites.other["official-artwork"].front_shiny,
+                showShiny: false
             }
         })
         setPokemons(await Promise.all(newPokemons))
         console.log(pokemons)
     }
 
-    const renderValoresPOkemons = ({ item }) => (
+    const renderValoresPokemons = ({ item }) => (
         <View style={styles.card}>
-            <Text style={styles.title}>{`Pokemon n°${item.id}: ${item.name}`}</Text>
-            <Image style={styles.image} source={{ uri: item.img }} />
-            <Button style={{backgroundColor:"red"}} title="Borrar Pokemon" onPress={() => deletePokemon(item.id)} />
+            <Text style={styles.title}>{`Pokemon n°${item.id}: ${mayusLetra(item.name)}`}</Text>
+            <Image style={styles.image} source={{ uri: item.showShiny ? item.imgShiny : item.img }} />
+
+            <View style={styles.divButtonsInCard}>
+                <TouchableOpacity style={styles.buttonCard} onPress={() => toShiny(item.id)}>
+                    <Text style={styles.buttonTextCard}>{item.showShiny ? "Normal" : "Shiny"}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.buttonCard} onPress={() => deletePokemon(item.id)}>
+                    <Text style={styles.buttonTextCard}>Eliminar</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-    )
+    );
+
+    const mayusLetra = (text) => {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+      };
 
     const deletePokemon = (id) => {
         const updatedPokemons = pokemons.filter((pokemon) => pokemon.id !== id);
         setPokemons(updatedPokemons);
     };
 
+    const toShiny = (id) => {
+        setPokemons((prevPokemons) => prevPokemons.map((pokemon) => {
+            if (pokemon.id === id) {
+                return {
+                    ...pokemon,
+                    showShiny: !pokemon.showShiny
+                };
+            }
+            return pokemon;
+        })
+        );
+    };
+
     const buscarPokemons = pokemons.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(searchText.toLowerCase())
     );
-
 
     return (
         <ImageBackground source={require('../images/pokemon_wallpaper.jpg')} style={styles.backgroundImage}>
@@ -56,7 +86,7 @@ const Pokemon = ({navigation}) => {
             </View>
 
             <View style={styles.container}>
-                <FlatList data={buscarPokemons} numColumns={2} renderItem={renderValoresPOkemons} keyExtractor={(item) => item.id}
+                <FlatList data={buscarPokemons} numColumns={2} renderItem={renderValoresPokemons} keyExtractor={(item) => item.id}
                 />
             </View>
 
@@ -75,14 +105,14 @@ export default Pokemon
 const styles = StyleSheet.create({
     bajarBoton: {
         width: '80%',
-        marginTop: 630,
+        marginTop: 610,
         textAlign: 'center',
         marginLeft: '10%'
 
     },
     container: {
         width: "100%",
-        paddingBottom:100
+        paddingBottom: 100
 
     },
     divInput: {
@@ -140,8 +170,35 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#000',
-        fontSize: 25,
-        textAlign: 'center'
+        fontSize: 27,
+        textAlign: 'center',
 
+    },
+    buttonCard: {
+        backgroundColor: '#00000060',
+        borderRadius: 18,
+        borderWidth: 0.1,
+        paddingVertical: 8,
+        //paddingHorizontal: 12,
+        // padding: 10,
+        paddingEnd:7,
+        paddingStart:7,
+        margin:6,
+        // marginTop: 10,
+        // marginLeft:2,
+        // marginRight:2,
+        // marginBottom: 3,
+
+    },
+    buttonTextCard: {
+        color: '#fff',
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    divButtonsInCard:{
+        flex:1,
+        flexDirection: 'row', 
+        justifyContent: 'space-between',
+        marginTop: 10,
     }
 })
