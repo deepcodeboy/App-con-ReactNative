@@ -2,7 +2,13 @@ import { StyleSheet, View} from 'react-native';
 import Pokemon from './components/Pokemones';
 import Home from './components/Home';
 import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-vector-icons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { set } from 'react-native-vector-icons';
+
+
 
 const Stack = createNativeStackNavigator();
 

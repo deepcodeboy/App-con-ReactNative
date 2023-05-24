@@ -2,7 +2,10 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import Constants from 'expo-constants'
 import { scale } from 'react-native-size-matters'
+import 'react-native-vector-icons'; // Agrega esta línea
+import { set } from 'react-native-vector-icons'; // Agrega esta línea
 import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Pokemon = ({ navigation }) => {
     const [pokemons, setPokemons] = useState([])
@@ -45,7 +48,8 @@ const Pokemon = ({ navigation }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.buttonCard} onPress={() => deletePokemon(item.id)}>
-                    <Text style={styles.buttonTextCard}>Eliminar</Text>
+                    {/* <Text style={styles.buttonTextCard}>Eliminar</Text> */}
+                    <FontAwesome style={{paddingTop:3.5,}} name="trash" size={20} color="white" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -53,7 +57,7 @@ const Pokemon = ({ navigation }) => {
 
     const mayusLetra = (text) => {
         return text.charAt(0).toUpperCase() + text.slice(1);
-      };
+    };
 
     const deletePokemon = (id) => {
         const updatedPokemons = pokemons.filter((pokemon) => pokemon.id !== id);
@@ -80,6 +84,11 @@ const Pokemon = ({ navigation }) => {
     return (
         <ImageBackground source={require('../images/pokemon_wallpaper.jpg')} style={styles.backgroundImage}>
 
+            {pokemons.length == 0 && (<View style={styles.divDexterText}>
+                <Text style={styles.textDexter}>Bienvenido a la Pokedex</Text>
+
+            </View>)}
+
             <View style={styles.divInput}>
                 {pokemons.length > 0 && (<TextInput style={styles.searchInput} placeholder="Buscar Pokémon" value={searchText} onChangeText={(text) => setSearchText(text)}
                 />)}
@@ -105,7 +114,7 @@ export default Pokemon
 const styles = StyleSheet.create({
     bajarBoton: {
         width: '80%',
-        marginTop: 610,
+        marginTop: 505,
         textAlign: 'center',
         marginLeft: '10%'
 
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
 
     },
     title: {
-        fontSize: 20,
+        fontSize: 21,
         marginBottom: 8,
 
     },
@@ -179,11 +188,11 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         borderWidth: 0.1,
         paddingVertical: 8,
+        padding:15,
+        margin:4,
+        flexDirection:'row',
         //paddingHorizontal: 12,
         // padding: 10,
-        paddingEnd:7,
-        paddingStart:7,
-        margin:6,
         // marginTop: 10,
         // marginLeft:2,
         // marginRight:2,
@@ -192,13 +201,21 @@ const styles = StyleSheet.create({
     },
     buttonTextCard: {
         color: '#fff',
-        fontSize: 18,
+        fontSize: 20,
         textAlign: 'center',
     },
-    divButtonsInCard:{
-        flex:1,
-        flexDirection: 'row', 
-        justifyContent: 'space-between',
-        marginTop: 10,
+    divButtonsInCard: {
+        flexDirection: 'row',
+        marginTop: 8,
+    },
+    textDexter: {
+        fontSize: 27,
+        marginTop: 20,
+        textAlign: 'center',
+        color: '#f1f1f1',
+    },
+    divDexterText: {
+        marginTop: scale(Constants.statusBarHeight)
+
     }
 })
