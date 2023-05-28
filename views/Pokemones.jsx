@@ -37,6 +37,7 @@ const Pokemon = ({ navigation }) => {
         console.log(pokemons)
     }
 
+
     const renderValoresPokemons = ({ item }) => (
         <View style={styles.card}>
             <Text style={styles.title}>{`Pokemon n°${item.id}: ${mayusLetra(item.name)}`}</Text>
@@ -55,14 +56,17 @@ const Pokemon = ({ navigation }) => {
         </View>
     );
 
+
     const mayusLetra = (text) => {
         return text.charAt(0).toUpperCase() + text.slice(1);
     };
+
 
     const deletePokemon = (id) => {
         const updatedPokemons = pokemons.filter((pokemon) => pokemon.id !== id);
         setPokemons(updatedPokemons);
     };
+
 
     const toShiny = (id) => {
         setPokemons((prevPokemons) => prevPokemons.map((pokemon) => {
@@ -77,16 +81,17 @@ const Pokemon = ({ navigation }) => {
         );
     };
 
+
     const buscarPokemons = pokemons.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(searchText.toLowerCase())
     );
+
 
     return (
         <ImageBackground source={require('../images/pokemon_wallpaper.jpg')} style={styles.backgroundImage}>
 
             {pokemons.length == 0 && (<View style={styles.divDexterText}>
                 <Text style={styles.textDexter}>Bienvenido a la Pokedex</Text>
-
             </View>)}
 
             <View style={styles.divInput}>
